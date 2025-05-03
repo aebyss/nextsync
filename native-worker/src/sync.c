@@ -19,13 +19,13 @@ struct MemoryStruct {
 static size_t read_callback(void *ptr, size_t size, size_t nmemb, void *stream) {
     FILE *f = (FILE *)stream;
     size_t n = fread(ptr, size, nmemb, f);
-    printf("📤 [C] Read %zu bytes from file\n", n);
+    printf("[C] Read %zu bytes from file\n", n);
     return n;
 }
 
 int upload_file(const char* local_path, const char* nextcloud_url, const char* username, const char* password) {
     if (!local_path || !nextcloud_url || !username || !password) {
-        fprintf(stderr, "❌ Missing parameters in upload_file\n");
+        fprintf(stderr, "Missing parameters in upload_file\n");
         return -3;
     }
 
@@ -34,7 +34,7 @@ int upload_file(const char* local_path, const char* nextcloud_url, const char* u
 
     FILE *file = fopen(local_path, "rb");
     if (!file) {
-        fprintf(stderr, "❌ Failed to open file: %s\n", local_path);
+        fprintf(stderr, "Failed to open file: %s\n", local_path);
         return -2;
     }
 
@@ -42,7 +42,7 @@ int upload_file(const char* local_path, const char* nextcloud_url, const char* u
     fseek(file, 0, SEEK_END);
     curl_off_t filesize = ftell(file);
     fseek(file, 0, SEEK_SET);
-    printf("📦 [C] File to upload: %s (%lld bytes)\n", local_path, (long long)filesize);
+    printf("[C] File to upload: %s (%lld bytes)\n", local_path, (long long)filesize);
 
     // Prepare credentials
     char userpwd[512];
@@ -58,7 +58,7 @@ int upload_file(const char* local_path, const char* nextcloud_url, const char* u
     curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L); // Debug output
 
     CURLcode res = curl_easy_perform(curl);
-    printf("📶 [C] curl_easy_perform result: %d\n", res);
+    printf("[C] curl_easy_perform result: %d\n", res);
 
     fclose(file);
     curl_easy_cleanup(curl);
