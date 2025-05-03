@@ -10,12 +10,13 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
+// Buffers data received by libcurl in memory (used for WebDAV responses)
 struct MemoryStruct {
     char *memory;
     size_t size;
 };
 
-// Optional: log each read
+// Callback to read file data during upload (used by libcurl)
 static size_t read_callback(void *ptr, size_t size, size_t nmemb, void *stream) {
     FILE *f = (FILE *)stream;
     size_t n = fread(ptr, size, nmemb, f);
@@ -23,6 +24,7 @@ static size_t read_callback(void *ptr, size_t size, size_t nmemb, void *stream) 
     return n;
 }
 
+// Uploads a file to Nextcloud using HTTP PUT and basic authentication
 int upload_file(const char* local_path, const char* nextcloud_url, const char* username, const char* password) {
     if (!local_path || !nextcloud_url || !username || !password) {
         fprintf(stderr, "Missing parameters in upload_file\n");
@@ -67,6 +69,8 @@ int upload_file(const char* local_path, const char* nextcloud_url, const char* u
 }
 
 
+// Downloads a file from Nextcloud to a local path using HTTP GET
+//TODO Implement it in my NativeClient
 void download_file(const char* nextcloud_url, const char* local_path, const char* username, const char* password) {
     CURL *curl = curl_easy_init();
     if (curl) {
@@ -88,12 +92,13 @@ void download_file(const char* nextcloud_url, const char* local_path, const char
         curl_easy_cleanup(curl);
     }
     }
-
+// Callback for writing data directly to file (used in download or PROPFIND)
  static size_t write_callback(void *ptr, size_t size, size_t nmemb, void *userdata) {
      FILE *file = (FILE *)userdata;
      return fwrite(ptr, size, nmemb, file);
  }
 
+// Sends a PROPFIND request to a WebDAV endpoint and writes XML response to a temporary file
  int list_folders(const char* remote_url, const char* username, const char* password) {
      CURL *curl = curl_easy_init();
      if (!curl) return -1;
@@ -122,6 +127,7 @@ void download_file(const char* nextcloud_url, const char* local_path, const char
      return (int)res;
  }
 
+// Callback to write incoming HTTP data into a dynamically allocated memory buffer
 static size_t write_memory(void *contents, size_t size, size_t nmemb, void *userp) {
     size_t realsize = size * nmemb;
     struct MemoryStruct *mem = (struct MemoryStruct *)userp;
@@ -137,6 +143,8 @@ static size_t write_memory(void *contents, size_t size, size_t nmemb, void *user
     return realsize;
 }
 
+
+// Sends a PROPFIND request and extracts folder names from the XML response into a provided output buffer
 int list_folders_into_buffer(const char* remote_url, const char* username, const char* password, char* outBuffer, size_t outSize) {
     CURL *curl = curl_easy_init();
     if (!curl) return -1;
