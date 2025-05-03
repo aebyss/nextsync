@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Native Upload</title>
+</head>
+<body>
+<h2>📤 Native Upload to Nextcloud</h2>
+
+<form id="uploadForm">
+    <label>Remote Folder:</label>
+    <select id="remoteFolder"></select>
+    <button type="button" onclick="loadFolders()">🔄 Refresh Folders</button><br><br>
+
+    <input type="file" id="file" required /><br><br>
+    <input type="text" id="url" value="https://nextcloud.edinf.dev/remote.php/dav/files/admin/" required /><br><br>
+    <input type="text" id="username" required /><br><br>
+    <input type="password" id="password" required /><br><br>
+    <button type="submit">Upload</button>
+</form>
+
+<p id="result"></p>
+
+<!-- 🔗 Link your external script -->
+<script src="main.js"></script>
+</body>
+</html>
