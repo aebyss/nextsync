@@ -30,12 +30,12 @@ libsync.so # Compiled native shared library
 
 ### 1. Compile the native library
 
-```bash
 cd native-worker
 gcc -fPIC -shared -o libsync.so src/sync.c -lcurl -lxml2
 
 Make sure libsync.so is discoverable via the JVM (e.g., by setting LD_LIBRARY_PATH or placing it in the project root).
 
+```bash
 ### Run jextract
 
 jextract --source \
@@ -52,3 +52,13 @@ or use the run script run.sh
 cd quarkus-service
 ./mvnw compile quarkus:dev
 
+#### Environment Variables
+The service reads the following environment variables:
+
+Example:
+```bash
+export NEXTCLOUD_URL="https://cloud.example.com/remote.php/dav/files/admin/"
+export NEXTCLOUD_USER="admin"
+export NEXTCLOUD_PASSWORD="secret"
+export WATCH_DIR="/home/user/sync-folder"
+```
