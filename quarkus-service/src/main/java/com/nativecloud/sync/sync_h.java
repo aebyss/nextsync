@@ -92,6 +92,124 @@ public class sync_h {
      */
     public static final OfInt wchar_t = sync_h.C_INT;
 
+    private static class testMacro {
+        public static final FunctionDescriptor DESC = FunctionDescriptor.of(
+            sync_h.C_INT,
+            sync_h.C_INT,
+            sync_h.C_INT
+        );
+
+        public static final MemorySegment ADDR = sync_h.findOrThrow("testMacro");
+
+        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(ADDR, DESC);
+    }
+
+    /**
+     * Function descriptor for:
+     * {@snippet lang=c :
+     * int testMacro(int a, int b)
+     * }
+     */
+    public static FunctionDescriptor testMacro$descriptor() {
+        return testMacro.DESC;
+    }
+
+    /**
+     * Downcall method handle for:
+     * {@snippet lang=c :
+     * int testMacro(int a, int b)
+     * }
+     */
+    public static MethodHandle testMacro$handle() {
+        return testMacro.HANDLE;
+    }
+
+    /**
+     * Address for:
+     * {@snippet lang=c :
+     * int testMacro(int a, int b)
+     * }
+     */
+    public static MemorySegment testMacro$address() {
+        return testMacro.ADDR;
+    }
+
+    /**
+     * {@snippet lang=c :
+     * int testMacro(int a, int b)
+     * }
+     */
+    public static int testMacro(int a, int b) {
+        var mh$ = testMacro.HANDLE;
+        try {
+            if (TRACE_DOWNCALLS) {
+                traceDowncall("testMacro", a, b);
+            }
+            return (int)mh$.invokeExact(a, b);
+        } catch (Throwable ex$) {
+           throw new AssertionError("should not reach here", ex$);
+        }
+    }
+
+    private static class quicksort {
+        public static final FunctionDescriptor DESC = FunctionDescriptor.ofVoid(
+            sync_h.C_POINTER,
+            sync_h.C_INT,
+            sync_h.C_INT
+        );
+
+        public static final MemorySegment ADDR = sync_h.findOrThrow("quicksort");
+
+        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(ADDR, DESC);
+    }
+
+    /**
+     * Function descriptor for:
+     * {@snippet lang=c :
+     * void quicksort(int *array, int low, int high)
+     * }
+     */
+    public static FunctionDescriptor quicksort$descriptor() {
+        return quicksort.DESC;
+    }
+
+    /**
+     * Downcall method handle for:
+     * {@snippet lang=c :
+     * void quicksort(int *array, int low, int high)
+     * }
+     */
+    public static MethodHandle quicksort$handle() {
+        return quicksort.HANDLE;
+    }
+
+    /**
+     * Address for:
+     * {@snippet lang=c :
+     * void quicksort(int *array, int low, int high)
+     * }
+     */
+    public static MemorySegment quicksort$address() {
+        return quicksort.ADDR;
+    }
+
+    /**
+     * {@snippet lang=c :
+     * void quicksort(int *array, int low, int high)
+     * }
+     */
+    public static void quicksort(MemorySegment array, int low, int high) {
+        var mh$ = quicksort.HANDLE;
+        try {
+            if (TRACE_DOWNCALLS) {
+                traceDowncall("quicksort", array, low, high);
+            }
+            mh$.invokeExact(array, low, high);
+        } catch (Throwable ex$) {
+           throw new AssertionError("should not reach here", ex$);
+        }
+    }
+
     private static class upload_file {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
             sync_h.C_INT,
@@ -465,6 +583,15 @@ public class sync_h {
      */
     public static MemorySegment NULL() {
         return NULL;
+    }
+    private static final double PI = 3.1415926535d;
+    /**
+     * {@snippet lang=c :
+     * #define PI 3.1415926535
+     * }
+     */
+    public static double PI() {
+        return PI;
     }
 }
 

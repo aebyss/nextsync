@@ -25,12 +25,12 @@ public class FolderWatcherResource {
     public static void incrementUpload(String fileName) {
         uploadCount++;
         lastUploaded = fileName;
-        log("✅ Uploaded: " + fileName);
+        log("Uploaded: " + fileName);
     }
 
     public static void incrementError(String error) {
         errorCount++;
-        log("❌ Error: " + error);
+        log("Error: " + error);
     }
 
     @GET

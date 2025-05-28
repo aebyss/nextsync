@@ -2,8 +2,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import java.lang.foreign.*;
 import java.util.List;
 
-import static com.nativecloud.sync.sync_h.upload_file;
-import static com.nativecloud.sync.sync_h.list_folders_into_buffer;
+import static com.nativecloud.sync.sync_h.*;
 
 @ApplicationScoped
 public class NextcloudNativeClient {
@@ -67,5 +66,19 @@ public class NextcloudNativeClient {
         }
         return result.toString();
     }
+
+    public List<Integer> sortArray(int[] input) {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment array = arena.allocateArray(ValueLayout.JAVA_INT, input);
+            quicksort(array, 0, input.length - 1);
+
+            Integer[] result = new Integer[input.length];
+            for (int i = 0; i < input.length; i++) {
+                result[i] = array.getAtIndex(ValueLayout.JAVA_INT, i);
+            }
+            return List.of(result);
+        }
+    }
+
 }
 
